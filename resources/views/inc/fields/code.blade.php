@@ -10,8 +10,8 @@
     @endif
 </div>
 
-{{-- <script>
+<script>
     $(document).ready(function(){
-  $('#code').inputmask('AAAAAAAA');
+  $('#code').inputmask('999999-9999');
 });
-</script> --}}
+</script>

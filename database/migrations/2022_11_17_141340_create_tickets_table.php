@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('email')->comment('Email');
             $table->string('title')->comment('Тема');
             $table->text('message')->comment('Обращение');
-            $table->BigInteger('status_id')->unsigned()->comment('Статус');
+            $table->BigInteger('status_id')->unsigned()->default(1)->comment('Статус');
             $table->foreign('status_id')->references('id')->on('statuses')->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
             $table->softDeletes();

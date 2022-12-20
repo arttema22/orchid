@@ -9,29 +9,28 @@ use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Sight;
-use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Actions\Link;
 use App\Orchid\Layouts\Answer\AnswerEditLayout;
-use Orchid\Screen\TD;
+use Orchid\Screen\Fields\Group;
+use Orchid\Screen\Fields\Quill;
 use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Layouts\View;
 
 class TicketOpenScreen extends Screen
 {
-    public $ticket;
+    public $Ticket;
 
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(Ticket $ticket): iterable
+    public function query(Ticket $Ticket): iterable
     {
         return [
-            'ticket' => $ticket,
-            'draft' => Answer::where('ticket_id', $ticket->id)->where('status', 0)->first(),
+            'Ticket' => $Ticket,
+            'Draft' => Answer::where('ticket_id', $Ticket->id)->where('status', 0)->first(),
         ];
     }
 
@@ -42,7 +41,7 @@ class TicketOpenScreen extends Screen
      */
     public function name(): ?string
     {
-        return $this->ticket->title;
+        return $this->Ticket->title;
     }
 
     /**
@@ -52,7 +51,7 @@ class TicketOpenScreen extends Screen
      */
     public function description(): ?string
     {
-        return 'Создано ' . $this->ticket->created_at . ' ' . $this->ticket->status->name . ' с ' . $this->ticket->updated_at;
+        return 'Создано ' . $this->Ticket->created_at . ' ' . $this->Ticket->status->name . ' с ' . $this->Ticket->updated_at;
     }
 
     /**
@@ -67,7 +66,13 @@ class TicketOpenScreen extends Screen
                 ->icon('check')
                 ->class('btn btn-success')
                 ->method('toWork')
-                ->canSee($this->ticket->status_id == 1),
+                ->canSee($this->Ticket->status_id == 1),
+
+            Button::make('Закрыть обращение')
+                ->icon('close')
+                ->class('btn btn-warning')
+                ->method('toClose')
+                ->canSee($this->Ticket->status_id == 3),
 
             Link::make('Закрыть')
                 ->route('ticket.list')
@@ -84,15 +89,15 @@ class TicketOpenScreen extends Screen
     {
         return [
             Layout::columns([
-                Layout::legend('ticket', [
+                Layout::legend('Ticket', [
                     Sight::make('fullName', 'ФИО'),
                     Sight::make('organisation', 'Организация'),
                 ]),
-                Layout::legend('ticket', [
+                Layout::legend('Ticket', [
                     Sight::make('ls', 'Л/С'),
                     Sight::make('address', 'Адрес'),
                 ]),
-                Layout::legend('ticket', [
+                Layout::legend('Ticket', [
                     Sight::make('phone', 'Телефон'),
                     Sight::make('email', 'Почта'),
                 ]),
@@ -100,20 +105,20 @@ class TicketOpenScreen extends Screen
 
             Layout::view('ticket.partials.message'),
 
-            Layout::view('ticket.partials.setanswer')->canSee($this->ticket->status_id == 2),
-            Layout::tabs([
-                'Дать ответ' => [
-                    Layout::block(AnswerEditLayout::class)
-                        ->title('Ответ на обращение')
-                        ->description('Сохранить - только сохраняет ответ как черновик. Отправить - Сохраняет и отправляет ответ.')
-                        ->commands(
-                            Button::make('Сохранить')
-                                ->method('save')
-                                ->class('btn btn-success')
-                                ->icon('check')
-                        ),
-                ],
-            ])->canSee($this->ticket->status_id == 2),
+            Layout::rows([
+                Input::make('Draft.id')->type('hidden'),
+                Quill::make('Draft.message'),
+                Group::make([
+                    Button::make('Сохранить')
+                        ->method('save')
+                        ->class('btn btn-success')
+                        ->icon('save-alt'),
+                    Button::make('Отправить')
+                        ->method('send')
+                        ->class('btn btn-danger')
+                        ->icon('paper-plane'),
+                ]),
+            ])->canSee($this->Ticket->status_id == 2),
         ];
     }
 
@@ -124,15 +129,20 @@ class TicketOpenScreen extends Screen
         Toast::info('Обращение взято в работу');
     }
 
-    public function save(AnswerRequest $request, Ticket $ticket, $draft)
+    public function toClose(Ticket $ticket)
     {
-        dd($draft);
-        //  'draft' => Answer::where('ticket_id', $ticket->id)->where('status', 0)->get(),
-        $draftId = $request->input('draft.id');
+        $ticket->status_id = 4;
+        $ticket->save();
+        Toast::info('Обращение закрыто');
+    }
+
+    public function save(AnswerRequest $request, Ticket $ticket)
+    {
+        $draftId = $request->input('Draft.id');
         Answer::updateOrCreate(
             ['id' => $draftId],
             array_merge(
-                $request->validated()['draft'],
+                $request->validated()['Draft'],
                 [
                     'user_id' => Auth::user()->id,
                     'ticket_id' => $ticket->id,
@@ -140,5 +150,20 @@ class TicketOpenScreen extends Screen
             )
         );
         Toast::info('Ответ сохранен');
+    }
+
+    public function send(AnswerRequest $request, Ticket $ticket)
+    {
+        $this->save($request, $ticket);
+
+        $draftId = $request->input('Draft.id');
+        $answer = Answer::find($draftId);
+        $answer->status = 1;
+        $answer->save();
+
+        $ticket->status_id = 3;
+        $ticket->save();
+
+        Toast::info('Ответ отправлен автору обращения');
     }
 }

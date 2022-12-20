@@ -23,6 +23,7 @@ Route::get('/reception/ticket', [TicketController::class, 'index'])->name('recep
 Route::post('/reception/ticket', [TicketController::class, 'send'])->name('reception.send');
 Route::get('/reception/status', [TicketController::class, 'status'])->name('reception.status');
 Route::post('/reception/status', [TicketController::class, 'result'])->name('reception.result');
+Route::post('/reception/rating/{id}', [TicketController::class, 'rating'])->name('reception.rating');
 
 Route::get('/service/ticket', [OrderController::class, 'index'])->name('service.ticket');
 Route::post('/service/ticket', [OrderController::class, 'send'])->name('service.send');

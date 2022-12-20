@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TicketFERequest;
 use App\Http\Requests\TicketStatusFERequest;
 use App\Models\Ticket;
+use Illuminate\Http\Request;
 
 class TicketController extends Controller
 {
@@ -23,8 +24,8 @@ class TicketController extends Controller
     public function send(TicketFERequest $request)
     {
         Ticket::create(array_merge($request->validated(), [
-            'status_id' => 1,
-            'code' => substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTabcdefghijklmnopqrst"), 0, 10),
+            //'status_id' => 1,
+            'code' => date('sdi-mh'), // секунды-день-минуты-месяц-час
         ]));
         return view('ticket.success');
     }
@@ -35,7 +36,6 @@ class TicketController extends Controller
     */
     public function status()
     {
-
         return view('ticket.status');
     }
 
@@ -45,7 +45,19 @@ class TicketController extends Controller
     public function result(TicketStatusFERequest $request)
     {
         $Ticket = Ticket::where('code', $request->get('code'))->where('phone', $request->get('phone'))->first();
-
         return view('ticket.result', ['Ticket' => $Ticket]);
+    }
+
+    /*
+    * Функция сохраняет оценку в базу.
+    * Почтовые сообщения отправляет TicketObserver.
+    */
+    public
+    function rating($id, Request $request)
+    {
+        $ticket = Ticket::find($id);
+        $ticket->rating = $request->get('rating');
+        $ticket->save();
+        return view('ticket.rating');
     }
 }

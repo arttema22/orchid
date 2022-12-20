@@ -18,6 +18,7 @@ class StatusesSeeder extends Seeder
         $statuses = [
             'Новое',
             'В работе',
+            'Дан ответ',
             'Закрыто'
         ];
 

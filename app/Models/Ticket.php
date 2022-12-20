@@ -9,6 +9,7 @@ use Orchid\Screen\AsSource;
 use Orchid\Filters\Filterable;
 use App\Models\Traits\HasOrderTicketTrait;
 use Orchid\Metrics\Chartable;
+use Illuminate\Support\Carbon;
 
 class Ticket extends Model
 {
@@ -28,7 +29,7 @@ class Ticket extends Model
      */
     protected $fillable = [
         'first_name', 'last_name', 'patronymic', 'organisation',
-        'ls', 'address', 'phone', 'email', 'title', 'message', 'status_id', 'code'
+        'ls', 'address', 'phone', 'email', 'title', 'message', 'status_id', 'code', 'rating'
     ];
 
     /**

@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class NewTicket extends Mailable
+class UpdateTicket extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -30,7 +30,7 @@ class NewTicket extends Mailable
     public function build()
     {
         return $this
-            ->subject('Новое обращение с сайта. Тест.')
-            ->view('emails.ticket.NewTicket');
+            ->subject('Изменения в Вашем обращении. Тест.')
+            ->view('emails.ticket.UpdateTicket');
     }
 }

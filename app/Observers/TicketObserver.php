@@ -6,6 +6,7 @@ use App\Models\Ticket;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AdminNewTicket;
 use App\Mail\NewTicket;
+use App\Mail\UpdateTicket;
 
 class TicketObserver
 {
@@ -24,9 +25,17 @@ class TicketObserver
             ->cc($moreUsers)
             ->send(new AdminNewTicket($ticket));
 
-        // Send mail to client
-        Mail::to($ticket->email)
+        // Test message
+        // User nessage send admin
+        $toEmail = config('app.email_ticket');
+        $moreUsers = config('app.email_control');
+        Mail::to($toEmail)
+            ->cc($moreUsers)
             ->send(new NewTicket($ticket));
+
+        // Send mail to client
+        // Mail::to($ticket->email)
+        //     ->send(new NewTicket($ticket));
     }
 
     /**
@@ -37,7 +46,13 @@ class TicketObserver
      */
     public function updated(Ticket $ticket)
     {
-        //
+        // Test message
+        // User nessage send admin
+        $toEmail = config('app.email_ticket');
+        $moreUsers = config('app.email_control');
+        Mail::to($toEmail)
+            ->cc($moreUsers)
+            ->send(new UpdateTicket($ticket));
     }
 
     /**

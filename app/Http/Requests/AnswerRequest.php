@@ -24,7 +24,7 @@ class AnswerRequest extends FormRequest
     public function rules()
     {
         return [
-            'draft.message' => 'nullable',
+            'Draft.message' => 'nullable',
         ];
     }
 }
