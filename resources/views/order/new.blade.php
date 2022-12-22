@@ -6,6 +6,7 @@
 
 @section('content')
 <div class="row">
+    @include('inc.banners.electronicreceipt')
     <div class="col-md-8">
         <form method="post" action="">
             @csrf
