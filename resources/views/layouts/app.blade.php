@@ -57,10 +57,16 @@
                         Политика обработки персональных данных
                     </a>
                 </p>
+                <p class="small m-n">
+                    <a data-bs-toggle="offcanvas" href="#policy_cookies" role="button" aria-controls="offcanvas">
+                        Политика файлов cookies
+                    </a>
+                </p>
             </footer>
         </div>
     </main>
     @include('inc.widgets.policy_personal_data')
+    @include('inc.widgets.policy_cookies')
 </body>
 
 </html>
