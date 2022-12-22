@@ -47,15 +47,20 @@
         </div>
         <div class="container py-4">
             @yield('content')
-            <footer class="pt-3 mt-4 text-muted border-top">
+            <footer class="pt-3 mt-4 text-muted border-top d-flex justify-content-around">
                 <p class="small m-n">
                     © Copyright {{date('Y')}}
                     <a href="https://www.rks-energo.ru/" target="_blank">РКС-энерго</a>
                 </p>
+                <p class="small m-n">
+                    <a data-bs-toggle="offcanvas" href="#policy_personal_data" role="button" aria-controls="offcanvas">
+                        Политика обработки персональных данных
+                    </a>
+                </p>
             </footer>
         </div>
     </main>
-
+    @include('inc.widgets.policy_personal_data')
 </body>
 
 </html>
