@@ -2,7 +2,7 @@
     <input type="checkbox" name="agree-rule" class="form-check-input @if ($errors->get('agree-rule')) is-invalid @endif"
         id="agree-rule">
     <label class="form-check-label" for="agree-rule">
-        Я ознакомлен и согласен с <a data-bs-toggle="offcanvas" href="#offcanvas" role="button"
+        Я ознакомлен и согласен с <a data-bs-toggle="offcanvas" href="#regulation_personal_data" role="button"
             aria-controls="offcanvas">
             правилами
         </a>
@@ -13,4 +13,3 @@
     @endforeach
     @endif
 </div>
-@include('inc.widgets.rule_offcanvas')

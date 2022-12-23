@@ -62,11 +62,18 @@
                         Политика файлов cookies
                     </a>
                 </p>
+                <p class="small m-n">
+                    <a data-bs-toggle="offcanvas" href="#regulation_personal_data" role="button"
+                        aria-controls="offcanvas">
+                        Согласие на обработку персональных данных
+                    </a>
+                </p>
             </footer>
         </div>
     </main>
     @include('inc.widgets.policy_personal_data')
     @include('inc.widgets.policy_cookies')
+    @include('inc.widgets.regulation_personal_data')
 </body>
 
 </html>
