@@ -6,8 +6,7 @@
 
 @section('content')
 <div class="row">
-    @include('inc.banners.electronicreceipt')
-    <div class="col-md-8">
+    <div class="col-md-8 mb-5">
         <form method="post" action="">
             @csrf
             <div class="row">
@@ -53,8 +52,9 @@
             @include('inc.fields.btn-submit')
         </form>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 mb-5">
         @include('inc.alerts.blockedemail')
     </div>
+    @include('inc.banners.electronicreceipt')
 </div>
 @endsection

@@ -9,7 +9,6 @@
 
 @section('content')
 <div class="row align-items-md-stretch">
-    @include('inc.banners.electronicreceipt')
     <div class="col-md-6 mb-5">
         <div class="h-100 p-5 text-white bg-primary rounded-3">
             <h2>Обращения</h2>
@@ -31,5 +30,6 @@
             <a href="{{ route('reception.status') }}" class="btn btn-outline-secondary">Перейти</a>
         </div>
     </div>
+    @include('inc.banners.electronicreceipt')
 </div>
 @endsection
